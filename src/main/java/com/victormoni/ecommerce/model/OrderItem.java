@@ -1,0 +1,53 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.victormoni.ecommerce.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ *
+ * @author Victor Moni
+ */
+@Entity
+@Table(name = "order_items")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class OrderItem {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
+    @NotNull
+    @Positive
+    private Integer quantity;
+
+    @NotNull
+    @PositiveOrZero
+    private BigDecimal unitPrice;  // guarda o preço na hora do pedido
+}
