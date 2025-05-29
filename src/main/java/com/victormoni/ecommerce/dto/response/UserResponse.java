@@ -1,12 +1,9 @@
-package com.victormoni.ecommerce.dto.request;
+package com.victormoni.ecommerce.dto.response;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,8 +17,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderRequest {
+public class UserResponse {
 
-    @NotEmpty(message = "Deve haver ao menos 1 item no pedido")
-    private List<@NotNull OrderItemRequest> items;
+    private Long id;
+    private String username;
+    private String role;
 }

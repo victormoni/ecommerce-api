@@ -12,10 +12,10 @@ import lombok.*;
  * @author Victor Moni
  */
 @Data
+@Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Entity
 @Table(name = "users")
 public class User {
 

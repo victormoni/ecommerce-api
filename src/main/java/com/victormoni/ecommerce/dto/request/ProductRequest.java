@@ -22,9 +22,9 @@ import lombok.NoArgsConstructor;
  * @author Victor Moni
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class ProductRequest {
 
     @Schema(example = "Camiseta Azul", description = "Nome do produto")

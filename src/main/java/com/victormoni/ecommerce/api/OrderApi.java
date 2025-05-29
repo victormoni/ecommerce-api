@@ -18,17 +18,27 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.victormoni.ecommerce.dto.response.ErrorResponse;
+import com.victormoni.ecommerce.model.OrderStatus;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
  * @author Victor Moni
  */
-@Tag(name = "Orders", description = "Gerenciamento de pedidos")
+@Tag(name = "Pedidos", description = "Operações de gerenciamento de pedidos")
 @RequestMapping("/api/orders")
 public interface OrderApi {
 
@@ -42,6 +52,19 @@ public interface OrderApi {
     @GetMapping
     List<OrderResponse> list();
 
+    @Operation(summary = "Listar pedidos do usuário autenticado com paginação")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Pedidos retornados com sucesso"),
+        @ApiResponse(responseCode = "401", description = "Não autorizado",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/me")
+    ResponseEntity<Page<OrderResponse>> findMyOrders(@Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction);
+
     @Operation(summary = "Criar um novo pedido", description = "Recebe um OrderRequest e cria um pedido")
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "Pedido criado com sucesso",
@@ -51,7 +74,8 @@ public interface OrderApi {
         @ApiResponse(responseCode = "401", description = "Não autorizado")
     })
     @PostMapping
-    ResponseEntity<OrderResponse> create(@Valid @RequestBody OrderRequest dto);
+    ResponseEntity<OrderResponse> create(@AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody OrderRequest request);
 
     @Operation(summary = "Buscar pedido por ID", description = "Retorna os detalhes de um pedido específico")
     @ApiResponses({
@@ -64,6 +88,40 @@ public interface OrderApi {
     @GetMapping("/{id}")
     OrderResponse findById(@PathVariable Long id);
 
+    @Operation(
+            summary = "Listar pedidos por status",
+            description = "Retorna uma página de pedidos filtrados pelo status informado. Somente ADMIN."
+    )
+    @ApiResponses({
+        @ApiResponse(
+                responseCode = "200",
+                description = "Pedidos retornados com sucesso",
+                content = @Content(
+                        mediaType = MediaType.APPLICATION_JSON_VALUE,
+                        array = @ArraySchema(
+                                schema = @Schema(implementation = OrderResponse.class),
+                                arraySchema = @Schema(description = "Lista de pedidos")
+                        )
+                )
+        ),
+        @ApiResponse(responseCode = "401", description = "Não autorizado –> token ausente ou inválido"),
+        @ApiResponse(responseCode = "403", description = "Acesso negado –> papel insuficiente")
+    })
+    @GetMapping("/status/{status}")
+    public ResponseEntity<Page<OrderResponse>> findByStatus(
+            @PathVariable OrderStatus status,
+            @Parameter(description = "Número da página")
+            @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Tamanho da página")
+            @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "Campo para ordenação")
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @Parameter(
+                    schema = @Schema(allowableValues = {"asc", "desc"})
+            )
+            @RequestParam(defaultValue = "desc") String direction
+    );
+
     @Operation(summary = "Atualizar pedido", description = "Atualiza um pedido existente pelo ID")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Pedido atualizado com sucesso",
@@ -75,7 +133,10 @@ public interface OrderApi {
         @ApiResponse(responseCode = "401", description = "Não autorizado")
     })
     @PutMapping("/{id}")
-    OrderResponse update(@PathVariable Long id, @Valid @RequestBody OrderRequest dto);
+    ResponseEntity<OrderResponse> update(@Parameter(hidden = true)
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long id,
+            @Valid @RequestBody OrderRequest request);
 
     @Operation(summary = "Cancelar/excluir pedido", description = "Exclui um pedido pelo ID")
     @ApiResponses({
@@ -86,4 +147,5 @@ public interface OrderApi {
     })
     @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(@PathVariable Long id);
+
 }

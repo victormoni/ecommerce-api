@@ -24,7 +24,7 @@ import org.springframework.http.ResponseEntity;
  *
  * @author Victor Moni
  */
-@Tag(name = "Auth", description = "Endpoints de autenticação")
+@Tag(name = "Autenticação", description = "Endpoints de login, registro e tokens JWT")
 public interface AuthApi {
 
     @Operation(

@@ -14,14 +14,13 @@ import java.util.List;
  */
 public interface ProductService {
 
-    List<ProductResponse> getAll();
+    List<ProductResponse> list();
 
-    ProductResponse getById(Long id);
+    ProductResponse findById(Long id);
 
     ProductResponse create(ProductRequest dto);
 
     ProductResponse update(Long id, ProductRequest dto);
 
     void delete(Long id);
-
 }

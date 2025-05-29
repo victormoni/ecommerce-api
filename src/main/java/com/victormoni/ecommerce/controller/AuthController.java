@@ -17,10 +17,10 @@ import com.victormoni.ecommerce.security.JwtUtil;
 import com.victormoni.ecommerce.security.CustomUserDetailsService;
 import com.victormoni.ecommerce.service.AuthService;
 import com.victormoni.ecommerce.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -31,7 +31,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class AuthController implements AuthApi {
+@Tag(name = "Autenticação", description = "Endpoints de login, registro e tokens JWT")
+public class AuthController implements AuthApi{
 
     private final AuthService authService;
     private final JwtUtil jwtUtil;
@@ -39,7 +40,6 @@ public class AuthController implements AuthApi {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
-    @Override
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest body) {
         var auth = authService.authenticate(body.getUsername(), body.getPassword());
@@ -49,7 +49,6 @@ public class AuthController implements AuthApi {
         return ResponseEntity.ok(new AuthResponse(access, refresh));
     }
 
-    @Override
     @PostMapping("/refresh")
     public ResponseEntity<AuthResponse> refresh(@Valid @RequestBody RefreshRequest body) {
 
@@ -63,12 +62,11 @@ public class AuthController implements AuthApi {
         return ResponseEntity.ok(new AuthResponse(newAccess, body.getRefreshToken()));
     }
 
-    @Override
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest body) {
 
         String username = body.getUsername();
-        String password = body.getUsername();
+        String password = body.getPassword();
         Role role = Role.valueOf(body.getRole().toUpperCase());
 
         if (username == null || username.isBlank() || password == null || password.isBlank()) {

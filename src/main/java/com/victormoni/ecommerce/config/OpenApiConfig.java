@@ -43,18 +43,5 @@ public class OpenApiConfig {
                         )
                 );
     }
-
-    @Bean
-    public OpenApiCustomizer globalErrorResponses() {
-        return openApi -> openApi.getPaths().values().forEach(pathItem
-                -> pathItem.readOperations().forEach(op -> {
-                    op.getResponses()
-                            .addApiResponse("400",
-                                    new ApiResponse().description("Requisição inválida"));
-                    op.getResponses()
-                            .addApiResponse("401",
-                                    new ApiResponse().description("Não autorizado"));
-                })
-        );
-    }
 }
+

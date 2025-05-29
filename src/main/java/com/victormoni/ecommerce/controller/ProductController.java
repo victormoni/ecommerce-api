@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,24 +20,22 @@ import org.springframework.security.access.prepost.PreAuthorize;
  *
  * @author Victor Moni
  */
-@Tag(name = "Products", description = "Operações de gerenciamento de produtos")
 @RestController
-@RequestMapping("/api/products")
 @RequiredArgsConstructor
-public class ProductController implements ProductApi {
+@RequestMapping("/api/products")
+@Tag(name = "Produtos", description = "Operações de gerenciamento de produtos")
+public class ProductController implements ProductApi{
 
     private final ProductService service;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<List<ProductResponse>> list() {
-        return ResponseEntity.ok(service.getAll());
+        return ResponseEntity.ok(service.list());
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<ProductResponse> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getById(id));
+        return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping

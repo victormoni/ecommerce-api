@@ -16,9 +16,9 @@ import lombok.NoArgsConstructor;
  * @author Victor Moni
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class OrderItemResponse {
 
     private Long productId;

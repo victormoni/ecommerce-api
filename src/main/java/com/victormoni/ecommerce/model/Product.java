@@ -4,6 +4,7 @@ package com.victormoni.ecommerce.model;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+import com.victormoni.ecommerce.dto.request.ProductRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,10 +29,10 @@ import lombok.NoArgsConstructor;
  * @author Victor Moni
  */
 @Data
+@Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Entity
 @Table(name = "products")
 public class Product {
 
@@ -65,5 +66,12 @@ public class Product {
         if (this.stock == null) {
             this.stock = 0;
         }
+    }
+
+    public void updateFrom(ProductRequest dto) {
+        this.setName(dto.getName());
+        this.setDescription(dto.getDescription());
+        this.setPrice(dto.getPrice());
+        this.setStock(dto.getStock());
     }
 }

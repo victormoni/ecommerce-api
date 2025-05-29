@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  * @author Victor Moni
  */
-@Tag(name = "Products", description = "Operações de gerenciamento de produtos")
+@Tag(name = "Produtos", description = "Operações de gerenciamento de produtos")
 @RequestMapping("/api/products")
 public interface ProductApi {
 

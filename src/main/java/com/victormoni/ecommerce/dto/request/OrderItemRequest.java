@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
  * @author Victor Moni
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class OrderItemRequest {
 
     @Schema(example = "1", description = "ID do produto")

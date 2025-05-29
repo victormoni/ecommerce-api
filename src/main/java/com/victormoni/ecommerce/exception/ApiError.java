@@ -1,12 +1,11 @@
-package com.victormoni.ecommerce.dto.request;
+package com.victormoni.ecommerce.exception;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,10 +17,14 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class OrderRequest {
+@NoArgsConstructor
+public class ApiError {
 
-    @NotEmpty(message = "Deve haver ao menos 1 item no pedido")
-    private List<@NotNull OrderItemRequest> items;
+    private LocalDateTime timestamp;
+    private int status;
+    private String error;
+    private String message;
+    private String path;
+    private Map<String, String> fieldErrors;
 }

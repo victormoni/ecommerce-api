@@ -11,6 +11,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
@@ -27,12 +29,12 @@ import lombok.NoArgsConstructor;
  *
  * @author Victor Moni
  */
-@Entity
-@Table(name = "orders")
 @Data
+@Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Table(name = "orders")
 public class Order {
 
     @Id
@@ -49,6 +51,10 @@ public class Order {
 
     @Column(nullable = false)
     private BigDecimal total = BigDecimal.ZERO;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
