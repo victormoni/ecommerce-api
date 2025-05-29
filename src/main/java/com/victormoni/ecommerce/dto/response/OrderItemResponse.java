@@ -20,22 +20,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class OrderItemResponse {
-    private Long    productId;
-    private String  productName;
+
+    private Long productId;
+    private String productName;
     private Integer quantity;
     private BigDecimal unitPrice;
     private BigDecimal total;
 
     public static OrderItemResponse fromEntity(OrderItem item) {
-        BigDecimal qty = BigDecimal.valueOf(item.getQuantity());
-        BigDecimal tot = item.getUnitPrice().multiply(qty);
+        BigDecimal total = item.getUnitPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
 
         return OrderItemResponse.builder()
-            .productId(   item.getProduct().getId())
-            .productName( item.getProduct().getName())
-            .quantity(    item.getQuantity())
-            .unitPrice(   item.getUnitPrice())
-            .total(       tot)
-            .build();
+                .productId(item.getProduct() != null ? item.getProduct().getId() : null)
+                .productName(item.getProductName())
+                .quantity(item.getQuantity())
+                .unitPrice(item.getUnitPrice())
+                .total(total)
+                .build();
     }
 }
