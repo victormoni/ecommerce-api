@@ -1,9 +1,9 @@
+package com.victormoni.ecommerce.dto.request;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.victormoni.ecommerce.dto.request;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -24,6 +24,6 @@ public class RegisterRequest {
     @NotBlank
     private String password;
 
-   @Pattern(regexp = "USER|ADMIN", message = "Role deve ser USER ou ADMIN")
+    @Pattern(regexp = "USER|ADMIN", message = "Role deve ser USER ou ADMIN")
     private String role = "USER";
 }

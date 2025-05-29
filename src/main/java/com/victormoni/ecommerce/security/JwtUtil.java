@@ -8,7 +8,6 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.stereotype.Component;
-
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.List;
@@ -45,18 +44,18 @@ public class JwtUtil {
                 .compact();
     }
 
- public String generateRefreshToken(UserDetails userDetails) {
-    return Jwts.builder()
-        .setSubject(userDetails.getUsername())
-        .claim("roles", userDetails.getAuthorities()
-            .stream()
-            .map(GrantedAuthority::getAuthority)
-            .toList())
-        .setIssuedAt(new Date())
-        .setExpiration(new Date(System.currentTimeMillis() + 604800000L)) // 7 dias
-        .signWith(getSigningKey())
-        .compact();
-}
+    public String generateRefreshToken(UserDetails userDetails) {
+        return Jwts.builder()
+                .setSubject(userDetails.getUsername())
+                .claim("roles", userDetails.getAuthorities()
+                        .stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .toList())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 604800000L)) // 7 dias
+                .signWith(getSigningKey())
+                .compact();
+    }
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()

@@ -1,9 +1,10 @@
+package com.victormoni.ecommerce.service.impl;
+
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.victormoni.ecommerce.service.impl;
-
 import com.victormoni.ecommerce.dto.request.ProductRequest;
 import com.victormoni.ecommerce.dto.response.ProductResponse;
 import com.victormoni.ecommerce.exception.ResourceNotFoundException;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 import com.victormoni.ecommerce.repository.ProductRepository;
 import com.victormoni.ecommerce.service.ProductService;
 import lombok.RequiredArgsConstructor;
+
 /**
  *
  * @author Victor Moni
@@ -29,15 +31,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductResponse> getAll() {
         return productRepository.findAll()
-                   .stream()
-                   .map(ProductMapper::toResponseDTO)
-                   .collect(Collectors.toList());
+                .stream()
+                .map(ProductMapper::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     public ProductResponse getById(Long id) {
         Product product = productRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: " + id));
         return ProductMapper.toResponseDTO(product);
     }
 
@@ -51,10 +53,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse update(Long id, ProductRequest productRequestDTO) {
         Product existing = productRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: " + id));
         ProductMapper.updateEntity(existing, productRequestDTO);
         Product updated = productRepository.save(existing);
-        
+
         return ProductMapper.toResponseDTO(updated);
     }
 

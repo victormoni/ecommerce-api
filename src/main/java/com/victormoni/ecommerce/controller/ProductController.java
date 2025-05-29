@@ -1,9 +1,9 @@
+package com.victormoni.ecommerce.controller;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.victormoni.ecommerce.controller;
-
 import com.victormoni.ecommerce.api.ProductApi;
 import com.victormoni.ecommerce.dto.request.ProductRequest;
 import com.victormoni.ecommerce.dto.response.ProductResponse;
@@ -25,7 +25,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
-public class ProductController implements ProductApi{
+public class ProductController implements ProductApi {
 
     private final ProductService service;
 

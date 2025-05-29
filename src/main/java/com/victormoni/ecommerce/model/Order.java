@@ -1,9 +1,9 @@
+package com.victormoni.ecommerce.model;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.victormoni.ecommerce.model;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,8 +51,8 @@ public class Order {
     private BigDecimal total = BigDecimal.ZERO;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;   
-    
+    private OrderStatus status;
+
     @PrePersist
     void prePersist() {
         this.createdAt = LocalDateTime.now();

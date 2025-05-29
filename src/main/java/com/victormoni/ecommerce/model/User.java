@@ -1,9 +1,9 @@
+package com.victormoni.ecommerce.model;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.victormoni.ecommerce.model;
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,7 +28,7 @@ public class User {
 
     @Column(nullable = false)
     private String password;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;

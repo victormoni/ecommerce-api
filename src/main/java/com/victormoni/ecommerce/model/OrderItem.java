@@ -1,9 +1,9 @@
+package com.victormoni.ecommerce.model;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.victormoni.ecommerce.model;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -46,7 +46,7 @@ public class OrderItem {
 
     @Column(name = "product_name", nullable = false)
     private String productName;
-    
+
     @NotNull
     @Positive
     private Integer quantity;

@@ -1,9 +1,9 @@
+package com.victormoni.ecommerce.controller;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.victormoni.ecommerce.controller;
-
 import com.victormoni.ecommerce.api.OrderApi;
 import com.victormoni.ecommerce.dto.request.OrderRequest;
 import com.victormoni.ecommerce.dto.response.OrderResponse;
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/orders")
 @Tag(name = "Orders", description = "Gerenciamento de pedidos")
 @RequiredArgsConstructor
-public class OrderController implements OrderApi{
+public class OrderController implements OrderApi {
 
     private final OrderService orderService;
 

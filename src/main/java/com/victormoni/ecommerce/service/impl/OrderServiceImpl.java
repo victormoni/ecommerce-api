@@ -1,9 +1,9 @@
+package com.victormoni.ecommerce.service.impl;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.victormoni.ecommerce.service.impl;
-
 import com.victormoni.ecommerce.dto.request.OrderRequest;
 import com.victormoni.ecommerce.dto.response.OrderResponse;
 import com.victormoni.ecommerce.exception.BusinessException;
@@ -90,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
                     if (product.getStock() < itemDto.getQuantity()) {
                         throw new BusinessException("Estoque insuficiente para o produto " + product.getName());
                     }
-                    
+
                     OrderItem item = new OrderItem();
                     item.setOrder(order);
                     item.setProduct(product);

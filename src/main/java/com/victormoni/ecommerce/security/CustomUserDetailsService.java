@@ -23,15 +23,15 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    
+
     @Override
     public UserDetails loadUserByUsername(String username) {
         User u = userRepository.findByUsername(username)
-             .orElseThrow(() -> new UsernameNotFoundException(username));
+                .orElseThrow(() -> new UsernameNotFoundException(username));
         List<SimpleGrantedAuthority> authorities = List.of(
-            new SimpleGrantedAuthority("ROLE_" + u.getRole().name())
+                new SimpleGrantedAuthority("ROLE_" + u.getRole().name())
         );
         return new org.springframework.security.core.userdetails.User(
-            u.getUsername(), u.getPassword(), authorities);
+                u.getUsername(), u.getPassword(), authorities);
     }
 }

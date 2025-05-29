@@ -1,9 +1,9 @@
+package com.victormoni.ecommerce.api;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.victormoni.ecommerce.api;
-
 import com.victormoni.ecommerce.dto.request.OrderRequest;
 import com.victormoni.ecommerce.dto.response.OrderResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,9 +35,9 @@ public interface OrderApi {
     @Operation(summary = "Listar todos os pedidos", description = "Retorna a lista de pedidos cadastrados")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Pedidos retornados com sucesso",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponse.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponse.class))),
         @ApiResponse(responseCode = "401", description = "Não autorizado",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping
     List<OrderResponse> list();
@@ -45,9 +45,9 @@ public interface OrderApi {
     @Operation(summary = "Criar um novo pedido", description = "Recebe um OrderRequest e cria um pedido")
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "Pedido criado com sucesso",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponse.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponse.class))),
         @ApiResponse(responseCode = "400", description = "Requisição inválida",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "401", description = "Não autorizado")
     })
     @PostMapping
@@ -56,9 +56,9 @@ public interface OrderApi {
     @Operation(summary = "Buscar pedido por ID", description = "Retorna os detalhes de um pedido específico")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Pedido encontrado",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponse.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponse.class))),
         @ApiResponse(responseCode = "404", description = "Pedido não encontrado",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "401", description = "Não autorizado")
     })
     @GetMapping("/{id}")
@@ -67,11 +67,11 @@ public interface OrderApi {
     @Operation(summary = "Atualizar pedido", description = "Atualiza um pedido existente pelo ID")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Pedido atualizado com sucesso",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponse.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponse.class))),
         @ApiResponse(responseCode = "400", description = "Dados inválidos",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "404", description = "Pedido não encontrado",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "401", description = "Não autorizado")
     })
     @PutMapping("/{id}")
@@ -81,7 +81,7 @@ public interface OrderApi {
     @ApiResponses({
         @ApiResponse(responseCode = "204", description = "Pedido excluído com sucesso"),
         @ApiResponse(responseCode = "404", description = "Pedido não encontrado",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "401", description = "Não autorizado")
     })
     @DeleteMapping("/{id}")

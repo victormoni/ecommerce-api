@@ -1,9 +1,9 @@
+package com.victormoni.ecommerce.config;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.victormoni.ecommerce.config;
-
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.Components;
@@ -44,17 +44,17 @@ public class OpenApiConfig {
                 );
     }
 
-   @Bean
+    @Bean
     public OpenApiCustomizer globalErrorResponses() {
-        return openApi -> openApi.getPaths().values().forEach(pathItem ->
-            pathItem.readOperations().forEach(op -> {
-                op.getResponses()
-                  .addApiResponse("400",
-                      new ApiResponse().description("Requisição inválida"));
-                op.getResponses()
-                  .addApiResponse("401",
-                      new ApiResponse().description("Não autorizado"));
-            })
+        return openApi -> openApi.getPaths().values().forEach(pathItem
+                -> pathItem.readOperations().forEach(op -> {
+                    op.getResponses()
+                            .addApiResponse("400",
+                                    new ApiResponse().description("Requisição inválida"));
+                    op.getResponses()
+                            .addApiResponse("401",
+                                    new ApiResponse().description("Não autorizado"));
+                })
         );
-    }  
+    }
 }

@@ -1,16 +1,15 @@
+package com.victormoni.ecommerce.controller;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.victormoni.ecommerce.controller;
-
 import com.victormoni.ecommerce.api.AuthApi;
 import com.victormoni.ecommerce.dto.response.AuthResponse;
 import com.victormoni.ecommerce.dto.request.LoginRequest;
 import com.victormoni.ecommerce.dto.request.RefreshRequest;
 import com.victormoni.ecommerce.dto.request.RegisterRequest;
 import com.victormoni.ecommerce.dto.response.SuccessResponse;
-import com.victormoni.ecommerce.dto.response.ErrorResponse;
 import com.victormoni.ecommerce.exception.BusinessException;
 import com.victormoni.ecommerce.model.Role;
 import com.victormoni.ecommerce.model.User;
