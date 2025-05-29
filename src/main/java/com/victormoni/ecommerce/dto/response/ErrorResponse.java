@@ -16,12 +16,14 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Builder
-@NoArgsConstructor     
-@AllArgsConstructor    
+@NoArgsConstructor
+@AllArgsConstructor
 public class ErrorResponse {
-
-    @Schema(example = "Usuário já existe")
+   
+    private String timestamp;
+    private int status;
     private String error;
-
+    private String message;
+    private String path;
 }
 

@@ -56,7 +56,7 @@ public class OrderController implements OrderApi{
 
     @Operation(summary = "Buscar pedido por ID")
     @GetMapping("/{id}")
-    public OrderResponse get(@PathVariable Long id) {
+    public OrderResponse findById(@PathVariable Long id) {
         return orderService.findById(id);
     }
 

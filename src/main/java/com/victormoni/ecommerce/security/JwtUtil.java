@@ -6,66 +6,73 @@ package com.victormoni.ecommerce.security;
  */
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  *
  * @author Victor Moni
  */
+@Data
 @Component
+@ConfigurationProperties(prefix = "jwt")
 public class JwtUtil {
 
-    private final String jwtSecret = "minhaChaveSuperSecreta32Chars!123456";
-    private final long jwtExpirationMs = 86400000; // 1 dia
+    @NotBlank
+    private String secret;
+    private long expirationMs;
 
-    private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+    public SecretKey getSigningKey() {
+        return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("role", userDetails.getAuthorities().iterator().next().getAuthority());
-
+    public String generateToken(UserDetails user) {
         return Jwts.builder()
-                .subject(userDetails.getUsername())
-                .claims(claims)
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .setSubject(user.getUsername())
+                .claim("roles", user.getAuthorities()
+                        .stream().map(GrantedAuthority::getAuthority).toList())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(getSigningKey())
                 .compact();
     }
 
-    public String generateRefreshToken(UserDetails userDetails) {
-        return Jwts.builder()
-                .subject(userDetails.getUsername())
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 604800000L)) // 7 dias
-                .signWith(getSigningKey())
-                .compact();
-    }
+ public String generateRefreshToken(UserDetails userDetails) {
+    return Jwts.builder()
+        .setSubject(userDetails.getUsername())
+        .claim("roles", userDetails.getAuthorities()
+            .stream()
+            .map(GrantedAuthority::getAuthority)
+            .toList())
+        .setIssuedAt(new Date())
+        .setExpiration(new Date(System.currentTimeMillis() + 604800000L)) // 7 dias
+        .signWith(getSigningKey())
+        .compact();
+}
 
-    public String getUsernameFromToken(String token) {
+    private Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+                .getPayload();
     }
 
-    public String getRoleFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-        return claims.get("role", String.class);
+    public String getUsernameFromToken(String token) {
+        return extractAllClaims(token).getSubject();
+    }
+
+    public List<String> getRolesFromToken(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("roles", List.class);
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
@@ -74,21 +81,13 @@ public class JwtUtil {
     }
 
     public boolean isTokenExpired(String token) {
-        Date expiration = Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getExpiration();
+        Date expiration = extractAllClaims(token).getExpiration();
         return expiration.before(new Date());
     }
 
     public boolean isTokenValid(String token) {
         try {
-            Jwts.parser()
-                    .verifyWith(getSigningKey())
-                    .build()
-                    .parseSignedClaims(token);
+            extractAllClaims(token);
             return true;
         } catch (Exception e) {
             return false;

@@ -4,12 +4,10 @@
  */
 package com.victormoni.ecommerce.controller;
 
+import com.victormoni.ecommerce.api.ProductApi;
 import com.victormoni.ecommerce.dto.request.ProductRequest;
 import com.victormoni.ecommerce.dto.response.ProductResponse;
 import com.victormoni.ecommerce.service.ProductService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 /**
  *
@@ -26,62 +25,39 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
-public class ProductController {
+public class ProductController implements ProductApi{
 
     private final ProductService service;
 
-    @Operation(summary = "Listar todos os produtos", 
-               description = "Retorna uma lista de todos os produtos cadastrados")
-    @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> listAll() {
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<List<ProductResponse>> list() {
         return ResponseEntity.ok(service.getAll());
     }
 
-    @Operation(summary = "Obter produto por ID", 
-               description = "Retorna um produto específico pelo seu identificador")
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Produto encontrado"),
-        @ApiResponse(responseCode = "404", description = "Produto não encontrado")
-    })
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> getOne(@PathVariable Long id) {
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<ProductResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getById(id));
     }
 
-    @Operation(summary = "Criar novo produto", 
-               description = "Cadastra um novo produto a partir dos dados enviados")
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Produto criado com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Dados inválidos no request")
-    })
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductResponse> create(
             @Valid @RequestBody ProductRequest dto) {
         return ResponseEntity.ok(service.create(dto));
     }
 
-    @Operation(summary = "Atualizar produto existente", 
-               description = "Atualiza os dados de um produto pelo seu identificador")
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Produto atualizado com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Dados inválidos no request"),
-        @ApiResponse(responseCode = "404", description = "Produto não encontrado")
-    })
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductResponse> update(
             @PathVariable Long id,
             @Valid @RequestBody ProductRequest dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
-    @Operation(summary = "Excluir produto", 
-               description = "Remove um produto do catálogo pelo seu identificador")
-    @ApiResponses({
-        @ApiResponse(responseCode = "204", description = "Produto excluído com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Produto não encontrado")
-    })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();

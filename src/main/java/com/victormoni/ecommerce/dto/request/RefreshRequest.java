@@ -16,7 +16,7 @@ import lombok.Data;
 @Data
 public class RefreshRequest {
      
-    @Schema(example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…", description = "Token de atualização JWT")
+    @Schema(example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…", description = "Token de atualização JWT que expira em 7 dias")
     @NotBlank
     private String refreshToken;
 }

@@ -11,6 +11,8 @@ import com.victormoni.ecommerce.dto.request.RefreshRequest;
 import com.victormoni.ecommerce.dto.request.RegisterRequest;
 import com.victormoni.ecommerce.dto.response.SuccessResponse;
 import com.victormoni.ecommerce.dto.response.ErrorResponse;
+import com.victormoni.ecommerce.exception.BusinessException;
+import com.victormoni.ecommerce.model.Role;
 import com.victormoni.ecommerce.model.User;
 import com.victormoni.ecommerce.security.JwtUtil;
 import com.victormoni.ecommerce.security.CustomUserDetailsService;
@@ -23,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
 /**
  *
  * @author Victor Moni
@@ -31,7 +32,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class AuthController implements AuthApi{
+public class AuthController implements AuthApi {
 
     private final AuthService authService;
     private final JwtUtil jwtUtil;
@@ -56,33 +57,33 @@ public class AuthController implements AuthApi{
         if (!jwtUtil.isTokenValid(body.getRefreshToken())) {
             return ResponseEntity.status(401).build();
         }
-        
+
         String username = jwtUtil.getUsernameFromToken(body.getRefreshToken());
         var userDetails = userDetailsService.loadUserByUsername(username);
         String newAccess = jwtUtil.generateToken(userDetails);
         return ResponseEntity.ok(new AuthResponse(newAccess, body.getRefreshToken()));
     }
-    
+
     @Override
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest body) {
 
         String username = body.getUsername();
         String password = body.getUsername();
+        Role role = Role.valueOf(body.getRole().toUpperCase());
 
         if (username == null || username.isBlank() || password == null || password.isBlank()) {
-            return ResponseEntity.badRequest().body(new ErrorResponse("Usuário e senha são obrigatórios"));
+            throw new BusinessException("Usuário e senha são obrigatórios");
         }
 
-        if (userService.findByUsername(body.getUsername()).isPresent()) {
-            return ResponseEntity.status(409)
-                    .body(new ErrorResponse("Usuário já existe"));
+        if (userService.findByUsername(username).isPresent()) {
+            throw new BusinessException("Usuário já existe");
         }
 
         User newUser = new User();
-        newUser.setUsername(body.getUsername());
-        newUser.setPassword(passwordEncoder.encode(body.getPassword()));
-        newUser.setRole(body.getRole());
+        newUser.setUsername(username);
+        newUser.setPassword(passwordEncoder.encode(password));
+        newUser.setRole(role);
         userService.save(newUser);
         return ResponseEntity.ok(new SuccessResponse("Usuário registrado com sucesso"));
     }

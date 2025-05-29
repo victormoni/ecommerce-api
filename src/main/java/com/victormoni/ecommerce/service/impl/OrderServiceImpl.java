@@ -6,6 +6,7 @@ package com.victormoni.ecommerce.service.impl;
 
 import com.victormoni.ecommerce.dto.request.OrderRequest;
 import com.victormoni.ecommerce.dto.response.OrderResponse;
+import com.victormoni.ecommerce.exception.BusinessException;
 import com.victormoni.ecommerce.exception.ResourceNotFoundException;
 import com.victormoni.ecommerce.mapper.OrderMapper;
 import com.victormoni.ecommerce.model.Order;
@@ -60,13 +61,14 @@ public class OrderServiceImpl implements OrderService {
                     OrderItem item = new OrderItem();
                     item.setOrder(order);
                     item.setProduct(product);
+                    item.setProductName(product.getName());
                     item.setQuantity(itemDto.getQuantity());
                     item.setUnitPrice(product.getPrice());
                     return item;
                 })
                 .collect(Collectors.toList());
 
-        order.setItems(items);
+        order.getItems().addAll(items);
         order.calculateTotal();
 
         Order saved = orderRepository.save(order);
@@ -84,15 +86,21 @@ public class OrderServiceImpl implements OrderService {
                     Product product = productRepository.findById(itemDto.getProductId())
                             .orElseThrow(() -> new ResourceNotFoundException(
                             "Produto não encontrado com ID " + itemDto.getProductId()));
+
+                    if (product.getStock() < itemDto.getQuantity()) {
+                        throw new BusinessException("Estoque insuficiente para o produto " + product.getName());
+                    }
+                    
                     OrderItem item = new OrderItem();
                     item.setOrder(order);
                     item.setProduct(product);
+                    item.setProductName(product.getName());
                     item.setQuantity(itemDto.getQuantity());
                     item.setUnitPrice(product.getPrice());
                     return item;
                 })
                 .collect(Collectors.toList());
-        order.setItems(items);
+        order.getItems().addAll(items);
         order.calculateTotal();
 
         Order updated = orderRepository.save(order);

@@ -49,10 +49,12 @@ public class Product {
 
     @NotNull(message = "O preço é obrigatório")
     @PositiveOrZero(message = "Preço deve ser ≥ 0")
+    @Column(nullable = false)
     private BigDecimal price;
 
     @NotNull(message = "O estoque é obrigatório")
     @Min(value = 0, message = "Estoque deve ser ≥ 0")
+    @Column(nullable = false)
     private Integer stock;
 
     @Column(name = "created_at", updatable = false)

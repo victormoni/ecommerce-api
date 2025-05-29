@@ -1,12 +1,14 @@
+package com.victormoni.ecommerce.security;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.victormoni.ecommerce.security;
-
 import com.victormoni.ecommerce.model.User;
 import com.victormoni.ecommerce.repository.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,14 +25,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
     
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
-
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getUsername())
-                .password(user.getPassword())
-                .authorities(user.getRole())
-                .build();
+    public UserDetails loadUserByUsername(String username) {
+        User u = userRepository.findByUsername(username)
+             .orElseThrow(() -> new UsernameNotFoundException(username));
+        List<SimpleGrantedAuthority> authorities = List.of(
+            new SimpleGrantedAuthority("ROLE_" + u.getRole().name())
+        );
+        return new org.springframework.security.core.userdetails.User(
+            u.getUsername(), u.getPassword(), authorities);
     }
 }

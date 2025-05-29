@@ -16,13 +16,13 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Builder
-@NoArgsConstructor        
+@NoArgsConstructor
 @AllArgsConstructor
 public class AuthResponse {
-     
-    @Schema(example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…", description = "Token de acesso JWT")
+
+    @Schema(description = "Token de acesso JWT. Usado para autorizar requisições.")
     private String accessToken;
 
-    @Schema(example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…", description = "Token de atualização JWT")
+    @Schema(description = "Token de atualização JWT. Usado para obter novo token de acesso.")
     private String refreshToken;
 }
