@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.victormoni</groupId>
-    <artifactId>ecommerce-api</artifactId>
+    <artifactId>ecommerce-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ecommerce-api</name>
-    <description>E-commerce in Spring Boot</description>
+    <name>ecommerce-backend</name>
+    <description>E-commerce Backend in Spring Boot</description>
     <url/>
     <licenses>
         <license/>
